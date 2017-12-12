@@ -22,6 +22,11 @@ re_zh = re.compile('([\u4E00-\u9FA5]+)')
 
 
 def filter_stop(words):
+    """
+    过滤结束单词，比如 吗， 呸， 呢。。。。
+    :param words: 单词列表
+    :return: 返回非结束单词的 列表
+    """
     return list(filter(lambda x: x not in stop, words))
 
 
@@ -30,14 +35,25 @@ def zh2hans(sent):
 
 
 def get_sentences(doc):
+    """
+    获得文章的句子
+    sentence : 句子
+    :param doc: 要解析的文本
+    :return: 句子列表
+    """
+    # 段落换行
     line_break = re.compile('[\r\n]')
+    # 一句话结束
     delimiter = re.compile('[，。？！；]')
     sentences = []
     for line in line_break.split(doc):
+        # 段落去掉首尾空格
         line = line.strip()
         if not line:
             continue
+
         for sent in delimiter.split(line):
+            # 句子首尾去掉空格
             sent = sent.strip()
             if not sent:
                 continue
